@@ -1,3 +1,23 @@
+<?php
+$url = @$_GET['url'];
+$url = urldecode($url);
+//print($url);
+
+$ch = curl_init($url);
+//$fp = fopen("example_homepage.txt", "w");
+
+//curl_setopt($ch, CURLOPT_FILE, $fp);
+curl_setopt($ch, CURLOPT_HEADER, 0);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+$json = curl_exec($ch);
+curl_close($ch);
+
+//fclose($fp);
+?>
 <!--
 https://twitter.com/SubZtep
 Forked from an old version of jsonlint.com (https://github.com/umbrae/jsonlintdotcom)
@@ -140,7 +160,7 @@ Keep it simple \m/o.O\m/
 
 </div>
 
-<textarea id="json_input"></textarea>
+<textarea id="json_input"><?php echo @$json; ?></textarea>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.28.0/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.28.0/mode/javascript/javascript.min.js"></script>
@@ -157,6 +177,10 @@ Keep it simple \m/o.O\m/
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonlint/1.6.0/jsonlint.min.js"></script>
 <script type="text/javascript" src="c/js/jsl.parser.js"></script>
 <script src="js/main.js"></script>
+
+<?php
+if (!empty($json)) echo '<script>document.addEventListener("DOMContentLoaded", function(event) {compressJson(false);});</script>';
+?>
 
 </body>
 </html>

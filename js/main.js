@@ -1,6 +1,22 @@
-document.addEventListener("DOMContentLoaded", function(event) { 
+var cm = null;
 
-	var cm = CodeMirror.fromTextArea(document.getElementById('json_input'), {
+function compressJson(compress) {
+	try {
+		var jsonVal = cm.getValue();
+		var result = jsl.parser.parse(jsonVal);
+		if (compress) {
+			cm.setValue(JSON.stringify(JSON.parse(jsonVal), null, ""));
+		} else {
+			cm.setValue(JSON.stringify(JSON.parse(jsonVal), null, "\t"));
+		}
+	} catch (parseException) {
+		alert("Invalid JSON!");
+	}
+}
+
+document.addEventListener("DOMContentLoaded", function(event) {
+
+	cm = CodeMirror.fromTextArea(document.getElementById('json_input'), {
 		lineNumbers: true,
 		//mode: "javascript",
 		//mode: "application/ld+json",
@@ -24,21 +40,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		gtag('event', 'Click', {'event_category': 'Format', 'event_action': 'Beautify'})
 		compressJson(false);
 	});
-
-	function compressJson(compress) {
-		try {
-			var jsonVal = cm.getValue();
-			var result = jsl.parser.parse(jsonVal);
-			if (compress) {
-				cm.setValue(JSON.stringify(JSON.parse(jsonVal), null, ""));
-			} else {
-				cm.setValue(JSON.stringify(JSON.parse(jsonVal), null, "\t"));
-			}
-		} catch (parseException) {
-			alert("Invalid JSON!");
-		}
-	}
-
 });
 
 
