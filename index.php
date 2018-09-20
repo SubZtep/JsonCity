@@ -179,7 +179,7 @@ Keep it simple \m/o.O\m/
 <script src="js/main.js"></script>
 
 <?php
-if (!empty($json)) echo '<script>document.addEventListener("DOMContentLoaded", function(event) {compressJson(false);});</script>';
+if (!empty($json)) echo '<script>document.addEventListener("DOMContentLoaded", e=>{{ setTimeout(()=>{compressJson(false)}, 500) }})</script>';
 ?>
 
 </body>
