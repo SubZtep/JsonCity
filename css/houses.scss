@@ -1,0 +1,206 @@
+//
+// Read the blog post here:
+// http://una.im/sass-pixel-art
+//
+
+// Setting the colors we're syncing up with
+$pixel-color-map: (
+  'i': #0c1021,      // building block
+  //'o': #fffb17,      // window
+  'o': #99940f,      // window
+  'x': transparent,  // background
+  'c': #24346e       // cloud
+);
+
+// Size of the pixels
+$pixel-size: 4px !default;
+
+// Mario pixel art matrices!
+$pixel-art:(
+  building_one: (
+    (i, i, i, i, i)
+    (i, o, i, o, i)
+    (i, i, i, i, i)
+    (i, o, i, o, i)
+    (i, i, i, i, i)
+    (i, o, i, o, i)
+    (i, i, i, i, i)
+  ),
+
+  building_two: (
+    (x, x, x, x, i, x, x, x, x)
+    (x, x, x, i, i, i, x, x, x)
+    (x, x, x, i, o, i, x, x, x)
+    (x, x, i, i, i, i, i, x, x)
+    (x, x, i, o, i, o, i, x, x)
+    (x, x, i, i, i, i, i, x, x)
+    (x, i, i, o, i, o, i, i, x)
+    (i, i, i, i, i, i, i, i, i)
+  ),
+
+  building_three: (
+    (x, x, i, i, i, i, i)
+    (x, x, i, o, i, o, i)
+    (i, i, i, i, i, i, i)
+    (i, o, i, o, i, o, i)
+    (i, i, i, i, i, i, i)
+    (i, o, i, o, o, o, i)
+    (i, i, i, i, i, i, i)
+  ),
+
+  building_four: (
+    (i, i, i, i, i)
+    (i, o, i, o, i)
+    (i, i, i, i, i)
+    (i, o, i, i, i)
+    (i, i, i, i, i)
+  ),
+
+  building_five: (
+    (i, i, i, i, i)
+    (i, o, i, o, i)
+    (i, i, i, i, i)
+    (i, o, o, o, i)
+    (i, i, i, i, i)
+  ),
+
+  building_six: (
+    (i, i, i, i, i, i, i, i, i)
+    (i, o, i, o, i, o, i, o, i)
+    (i, i, i, i, i, i, i, i, i)
+    (i, o, i, o, i, i, i, o, i)
+    (i, i, i, i, i, i, i, i, i)
+    (i, o, i, o, o, o, i, o, i)
+    (i, i, i, i, i, i, i, i, i)
+  ),
+
+  building_seven: (
+    (x, x, i, i, i, i, i)
+    (x, x, i, o, i, o, i)
+    (x, x, i, i, i, i, i)
+    (x, x, i, o, o, o, i)
+    (i, i, i, i, i, i, i)
+    (i, o, i, i, i, o, i)
+    (i, i, i, i, i, i, i)
+  ),
+
+  cloud_one: (
+    (x, x, c, c, c, x, x)
+    (c, c, c, c, c, c, x)
+    (c, c, c, c, c, c, c)
+    (c, c, c, c, c, c, x)
+    (x, c, c, c, c, x, x)
+  ),
+
+  cloud_two: (
+    (x, x)
+    (x, x)
+    (c, c)
+  ),
+
+  cloud_three: (
+    (x, x, c, c, x, x)
+    (x, c, c, c, c, x)
+    (c, c, c, c, c, c)
+    (x, c, c, c, c, x)
+  ),
+
+  cloud_four: (
+    (x, x, c, c, c, x, x, c, c, x, x, x)
+    (x, c, c, c, c, c, c, c, c, c, c, x)
+    (x, c, c, c, c, c, x, c, c, x, c, c)
+    (x, x, c, c, c, c, c, c, c, c, c, x)
+    (x, x, x, x, c, c, c, c, c, x, x, x)
+  )
+
+);
+
+// Function to read the matrix and pixelize it!
+@function pixelize($matrix, $size){
+    $l: length($matrix); // length of the entire
+    $sh: ''; // shadows list
+    $i: $l; // length of the line
+
+    // read through the length of the matrix and decide on the box shadow color and position
+    @for $i from 1 through $l{
+      $row: nth($matrix,$i); //
+
+      @for $j from 1 through length($row){
+          $item: nth($row,$j);
+
+          @if map-has-key($pixel-color-map, $item) {
+            $sh:  $sh + ($j*$size) + ' ' + ($i*$size) + ' ' + map-get($pixel-color-map, $item);
+          } @else {
+            @warn 'there is no color specified in "$pixel-color-map" for: "#{$item}"';
+          }
+
+        @if not ($j == length($row) and $i == $l) {
+          $sh: $sh + ',';
+        }
+      }
+    }
+
+    @return unquote($sh);
+}
+
+// Mixin to style each item
+@mixin style-item($matrix, $size){
+  position: relative; // pixels stack next to each other
+
+  // set width & height of icon based on size of pixels
+  width:($size * length(nth($matrix,1)));
+  height:($size * length($matrix));
+
+  &:after{
+    content: '';
+
+    // position everything from the top left corner
+    position: absolute;
+    top: (-$size);
+    left: (-$size);
+    width: $size;
+    height: $size;
+
+    // this is where we make the stitch
+    box-shadow: pixelize($matrix,$size);
+  }
+}
+
+// Page styling
+body {
+  background: #282c85;
+}
+
+.buildings {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 6px;
+  width: 100%;
+  position: absolute;
+  bottom: -4px;
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 10;
+
+  &.clouds {
+    bottom: auto;
+    padding: 0;
+    top: 1px;
+    z-index: 5;
+    li {
+      margin: 0 4px;
+    }
+  }
+
+  li {
+    display: inline-block;
+    margin: 0;
+  }
+
+   @each $key, $value in $pixel-art{
+    &-#{$key}{
+      @include style-item($value, $pixel-size);
+    }
+  }
+}
+

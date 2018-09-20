@@ -1,0 +1,26 @@
+body {
+  background: #282c85; }
+
+.buildings {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  position: absolute;
+  bottom: -4px; }
+  .buildings li {
+    display: inline-block;
+    margin: 0; }
+  .buildings--building_one {
+    position: relative;
+    width: 20px;
+    height: 28px; }
+    .buildings--building_one:after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      width: 4px;
+      height: 4px;
+      -webkit-box-shadow: 4px 4px #0c1021,8px 4px #0c1021,12px 4px #0c1021,16px 4px #0c1021,20px 4px #0c1021,4px 8px #0c1021,8px 8px #fffb17,12px 8px #0c1021,16px 8px #fffb17,20px 8px #0c1021,4px 12px #0c1021,8px 12px #0c1021,12px 12px #0c1021,16px 12px #0c1021,20px 12px #0c1021,4px 16px #0c1021,8px 16px #fffb17,12px 16px #0c1021,16px 16px #fffb17,20px 16px #0c1021,4px 20px #0c1021,8px 20px #0c1021,12px 20px #0c1021,16px 20px #0c1021,20px 20px #0c1021,4px 24px #0c1021,8px 24px #fffb17,12px 24px #0c1021,16px 24px #fffb17,20px 24px #0c1021,4px 28px #0c1021,8px 28px #0c1021,12px 28px #0c1021,16px 28px #0c1021,20px 28px #0c1021;
+      box-shadow: 4px 4px #0c1021,8px 4px #0c1021,12px 4px #0c1021,16px 4px #0c1021,20px 4px #0c1021,4px 8px #0c1021,8px 8px #fffb17,12px 8px #0c1021,16px 8px #fffb17,20px 8px #0c1021,4px 12px #0c1021,8px 12px #0c1021,12px 12px #0c1021,16px 12px #0c1021,20px 12px #0c1021,4px 16px #0c1021,8px 16px #fffb17,12px 16px #0c1021,16px 16px #fffb17,20px 16px #0c1021,4px 20px #0c1021,8px 20px #0c1021,12px 20px #0c1021,16px 20px #0c1021,20px 20px #0c1021,4px 24px #0c1021,8px 24px #fffb17,12px 24px #0c1021,16px 24px #fffb17,20px 24px #0c1021,4px 28px #0c1021,8px 28px #0c1021,12px 28px #0c1021,16px 28px #0c1021,20px 28px #0c1021; }
