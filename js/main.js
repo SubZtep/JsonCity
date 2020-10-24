@@ -32,14 +32,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	});
 
 	document.getElementById("compress").addEventListener("click", function () {
-		gtag('event', 'Click', {'event_category': 'Format', 'event_action': 'Compress'})
-		compressJson(true);
-	});
+    compressJson(true);
+  });
 
 	document.getElementById("decompress").addEventListener("click", function () {
-		gtag('event', 'Click', {'event_category': 'Format', 'event_action': 'Beautify'})
-		compressJson(false);
-	});
+    compressJson(false);
+  });
 });
 
 
@@ -64,11 +62,10 @@ var btn = document.getElementById("help");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-	gtag('event', 'Click', {'event_category': 'Help', 'event_action': 'Open'})
-	modal.style.display = "block";
-}
+// When the user clicks the button, open the modal
+btn.onclick = function () {
+  modal.style.display = "block";
+};
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {

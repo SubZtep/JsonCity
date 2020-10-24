@@ -18,20 +18,6 @@ Keep it simple \m/o.O\m/
 	<link rel="stylesheet"
 		href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/search/matchesonscrollbar.min.css" />
 	<link rel="stylesheet" href="css/style.css" type="text/css">
-
-	<?php if ($_SERVER['SERVER_NAME'] !== 'localhost'): ?>
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109574299-2"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag() { dataLayer.push(arguments); }
-		gtag('js', new Date());
-
-		gtag('config', 'UA-109574299-2');
-	</script>
-	<?php else: ?>
-	<script>function gtag() { }</script>
-	<?php endif; ?>
 </head>
 
 <body>
@@ -43,14 +29,12 @@ Keep it simple \m/o.O\m/
 			<p>It’s a simple JSON formatter, I just made it because I needed it, I hope you’ll find it handy. <tt>:)</tt></p>
 			<p>You know, paste an API result on the huge editor and click on the button. Simple as finding that button.</p>
 			<p>Maybe I’ll add some functionality later, it’s really just a quick copy/paste code from several places.</p>
-			<p>The main idea comes from the old version of <a href="https://github.com/umbrae/jsonlintdotcom" target="_blank"
-					onclick="gtag('event', 'Link Click', {'event_category': 'Help', 'event_action': 'Old Jsonlint Github'})">jsonlint.com</a>.
+			<p>The main idea comes from the old version of <a href="https://github.com/umbrae/jsonlintdotcom"
+					target="_blank">jsonlint.com</a>.
 				Keep it simple. <tt>\m/o.O\m/</tt></p>
-			<p>Don’t worry, it's client-side only, I send nothing to my backend, although there is Google Analytics tracking
-				for the fun.</p>
+			<p>Don’t worry, it's client-side only, I send nothing to my backend, hosted on GitHub.</p>
 			<p>However, even I try to make it for good please use it at your own risk.</p>
-			<p>2017, <a href="https://twitter.com/SubZtep" target="_blank"
-					onclick="gtag('event', 'Link Click', {'event_category': 'Help', 'event_action': 'My Twitter'})">@SubZtep</a>
+			<p>2017-20, <a href="https://twitter.com/SubZtep" target="_blank">@SubZtep</a>
 			</p>
 		</div>
 	</div>
@@ -164,7 +148,7 @@ Keep it simple \m/o.O\m/
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/search/matchesonscrollbar.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/search/jump-to-line.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jsonlint/1.6.0/jsonlint.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jsonlint/1.6.3/jsonlint.min.js"></script>
 	<script type="text/javascript" src="c/js/jsl.parser.js"></script>
 	<script src="js/main.js"></script>
 </body>
