@@ -1,5 +1,9 @@
 var cm = null;
 
+// add tabs
+var tabs = new Tabs()
+//tabs.addTab(new Tab(2)).addTab(new Tab(3)).addTab(new Tab(4))
+
 function compressJson(compress) {
 	try {
 		var jsonVal = cm.getValue();
@@ -29,6 +33,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		},
 		foldGutter: true,
 		gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+	});
+
+	var elTabsWrapper = document.getElementById('tab-wrapper')
+	var tabsView = new TabsView(tabs, elTabsWrapper, cm)
+	tabsView.render()
+
+	// Add a listener for changes in the editor
+	cm.on("change", function(cm, changeObj) {
+		var currentContent = cm.getValue();
+		tabsView.onChange(currentContent)
+	});
+
+	// Add a listener for gutter clicks (on code folding expand / contract)
+	cm.on('gutterClick', function(cm, line, gutter, event) {
+		if (gutter === "CodeMirror-foldgutter") {
+			tabsView.onFoldChange(line)
+		}
 	});
 
 	document.getElementById("compress").addEventListener("click", function () {

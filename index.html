@@ -11,13 +11,14 @@ Keep it simple \m/o.O\m/
 	<meta charset="utf-8">
 	<meta name="description" content="Json.City is a web based validator and beautifier.">
 	<title>{ JSON_City }</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
 	<link rel="stylesheet"
-		href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/fold/foldgutter.min.css" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/dialog/dialog.min.css" />
+		href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/foldgutter.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/dialog/dialog.min.css" />
 	<link rel="stylesheet"
-		href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/search/matchesonscrollbar.min.css" />
+		href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/matchesonscrollbar.min.css" />
 	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="css/tabs.css" type="text/css">
 </head>
 
 <body>
@@ -133,23 +134,33 @@ Keep it simple \m/o.O\m/
 
 	</div>
 
-	<textarea id="json_input"></textarea>
+	<div class="page-with-tabs" style="height: calc(100% - 38px);">
+		<div id="tab-wrapper" class="tab-wrapper">
+			<div class="tabs"></div>
+		</div>
+		<textarea id="json_input"></textarea>
+	</div>
+	
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/mode/javascript/javascript.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/fold/foldcode.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/fold/foldgutter.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/fold/brace-fold.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/edit/matchbrackets.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/dialog/dialog.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/search/searchcursor.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/search/search.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/scroll/annotatescrollbar.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/foldcode.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/foldgutter.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/brace-fold.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/matchbrackets.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/dialog/dialog.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/searchcursor.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/search.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/scroll/annotatescrollbar.min.js"></script>
 	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/search/matchesonscrollbar.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/search/jump-to-line.min.js"></script>
+		src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/matchesonscrollbar.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/jump-to-line.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jsonlint/1.6.0/jsonlint.min.js"></script>
 	<script type="text/javascript" src="c/js/jsl.parser.js"></script>
+	<script src="js/Tabs/Tab.js"></script>
+	<script src="js/Tabs/Tabs.js"></script>
+	<script src="js/Tabs/TabsView.js"></script>
+	<script src="js/Tabs/Scroller.js"></script>
 	<script src="js/main.js"></script>
 </body>
 
