@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "nodemon": "^3.1.7",
+    "sass": "^1.81.0"
+  },
+  "scripts": {
+    "build": "node build.js",
+    "watch": "nodemon --exec node build.js --ignore js/jsoncity.js --ignore css/style.css --ext js,scss"
+  }
+}

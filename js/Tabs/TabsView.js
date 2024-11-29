@@ -1,16 +1,20 @@
 class TabsView {
     tabs
     elementWrapper
-    element
     editor
+
+    element
     tabNodes = new Map()
     nodeAddTab
+
+    isSwitchingTab = false
 
     constructor(tabs, elementWrapper, editor) {
         this.tabs = tabs
         this.elementWrapper = elementWrapper
-        this.element = elementWrapper.getElementsByClassName('tabs')[0]
         this.editor = editor
+
+        this.element = elementWrapper.getElementsByClassName('tabs')[0]
         this.scroller = new Scroller(this.element)
 
         this.element.addEventListener('wheel', (event) => {
@@ -30,7 +34,7 @@ class TabsView {
 
     render() {
         if (!this.nodeAddTab) {
-            var nodeAddTab = document.createElement('a')
+            const nodeAddTab = document.createElement('a')
             nodeAddTab.setAttribute('href', '#')
             nodeAddTab.className = 'tab plus'
             nodeAddTab.appendChild(document.createTextNode('+'))
@@ -38,48 +42,72 @@ class TabsView {
             nodeAddTab.addEventListener('click', (e) => {
                 e.preventDefault()
 
-                var newTab = new Tab(this.tabs.getTabs().length + 1)
-                this.tabs.addTab(newTab)
-                this.setActiveTab(newTab)
-
-                this.render()
-                if (!this.isActiveTabInView()) {
-                    this.moveActiveTabToView()
-                }
+                this.addTab()
             })
 
             this.nodeAddTab = nodeAddTab
             this.elementWrapper.appendChild(nodeAddTab)
         }
 
-        var activeTab = this.tabs.getActiveTab()
-        var tabs = this.tabs.getTabs()
+        const activeTab = this.tabs.getActiveTab()
+        const tabs = this.tabs.getTabs()
 
         this.element.innerHtml = ''
 
-        for (var index in tabs) {
-            var tab = tabs[index]
-            var tabNode = this.renderTab(tab, tab == activeTab)
-            //this.element.insertBefore(tabNode, this.nodeAddTab)
+        for (const index in tabs) {
+            const tab = tabs[index]
+            const tabNode = this.renderTab(tab, tab == activeTab)
             this.element.appendChild(tabNode)
         }
     }
 
+    addTab() {
+        const tabs = this.tabs.getTabs()
+        let title = tabs.length + 1
+        for (const index in tabs) {
+            const tab = tabs[index]
+            const titleIntValue = parseInt(tab.title)
+            if (titleIntValue >= title && titleIntValue == tab.title) {
+                title = titleIntValue + 1
+            }
+        }
+        const newTab = new Tab(title)
+        this.tabs.addTab(newTab)
+        this.setActiveTab(newTab)
+
+        this.render()
+        if (!this.isActiveTabInView()) {
+            this.moveActiveTabToView()
+        }
+
+        this.editor.syncState()
+    }
+
     renderTab(tab, isActive) {
         // update node if already exists
-        let n = this.tabNodes.get(tab)
-        if (n) {
-            this.updateTab(n, tab, isActive)
-            return n
+        let tabNodes = this.tabNodes.get(tab)
+        if (tabNodes) {
+            this.updateTab(tabNodes, tab, isActive)
+            return tabNodes.node
         }
 
         // create node
-        n = document.createElement('a')
+        const textNode = document.createTextNode(tab.getTitle())
+        const n = document.createElement('a')
         n.setAttribute('href', '#')
         n.addEventListener('click', (e) => {
             e.preventDefault()
             this.setActiveTab(tab)
             this.render()
+        })
+        n.addEventListener('dblclick', (e) => {
+            e.preventDefault()
+            const title = prompt('Enter new title of this tab', tab.title)
+            if (title) {
+                tab.title = title
+                textNode.textContent = title
+                this.editor.syncState()
+            }
         })
 
         let classNames = ['tab']
@@ -88,7 +116,12 @@ class TabsView {
         }
 
         n.className = classNames.join(' ')
-        n.appendChild(document.createTextNode(tab.getTitle()))
+
+        const nTitle = document.createElement('span')
+        nTitle.className = 'title'
+        nTitle.appendChild(textNode)
+
+        n.appendChild(nTitle)
 
         const nClose = document.createElement('a')
         nClose.setAttribute('href', '#')
@@ -96,70 +129,75 @@ class TabsView {
             e.preventDefault()
             e.stopPropagation()
             
-            if (this.tabs.removeTab(tab)) {
-                this.tabNodes.delete(tab)
-                n.parentNode.removeChild(n)
-                this.setActiveTab(this.tabs.getActiveTab())
-            }
+            this.removeTab(tab)
             this.render()
         })
         nClose.appendChild(document.createTextNode('x'))
         nClose.className = 'tab-close'
         n.appendChild(nClose)
 
-        this.tabNodes.set(tab, n)
+        this.tabNodes.set(tab, {
+            node: n,
+            titleTextNode: textNode
+        })
 
         return n
     }
 
-    updateTab(node, tab, isActive) {
-        var classNames = ['tab']
+    removeTab(tab) {
+        const tabNodes = this.tabNodes.get(tab)
+        if (this.tabs.removeTab(tab, true)) {
+            this.tabNodes.delete(tab)
+            if (tabNodes) {
+                tabNodes.node.parentNode.removeChild(tabNodes.node)
+            }
+            this.setActiveTab(this.tabs.getActiveTab())
+        }
+
+        this.editor.syncState()
+    }
+
+    syncRemoveTab(tab) {
+        const tabNodes = this.tabNodes.get(tab)
+        if (this.tabs.removeTab(tab, false)) {
+            this.tabNodes.delete(tab)
+            if (tabNodes) {
+                tabNodes.node.parentNode.removeChild(tabNodes.node)
+            }
+            this.setActiveTab(this.tabs.getActiveTab())
+        }
+    }
+
+    updateTab(tabNodes, tab, isActive) {
+        const classNames = ['tab']
         if (isActive) {
             classNames.push('active')
         }
-        node.className = classNames.join(' ')
+        tabNodes.node.className = classNames.join(' ')
+        tabNodes.titleTextNode.textContent = tab.title
     }
 
     setActiveTab(tab) {
-        // remember editor scroll position (relative values)
-        var scrollInfo = this.editor.getScrollInfo()
-        var activeTab = this.tabs.getActiveTab()
-        activeTab.setScrollPosition(
-            scrollInfo.width ? scrollInfo.left / scrollInfo.width : 0,
-            scrollInfo.height ? scrollInfo.top / scrollInfo.height : 0
-        )
+        this.isSwitchingTab = true
+        try {
+            // remember editor scroll position (relative values)
+            const cmEditor = this.editor.editor
+            const scrollInfo = cmEditor.getScrollInfo()
+            const activeTab = this.tabs.getActiveTab()
+            activeTab.setScrollPosition(
+                scrollInfo.width ? scrollInfo.left / scrollInfo.width : 0,
+                scrollInfo.height ? scrollInfo.top / scrollInfo.height : 0
+            )
 
-        this.tabs.setActiveTab(tab)
-
-        this.setContent(tab.getContent())
-        this.setFoldedLines(tab.getFoldedLines())
-        this.setScrollPos(tab.getScrollPosition())
-    }
-
-    setContent(content) {
-        this.editor.setValue(content)
-    }
-
-    setScrollPos(scrollPos) {
-        var scrollInfo = this.editor.getScrollInfo();
-        this.editor.scrollTo(
-            scrollInfo.width * scrollPos.left,
-            scrollInfo.height * scrollPos.top
-        )
-    }
-
-    setFoldedLines(foldedLines) {
-        foldedLines.forEach((lineNumber) => {
-            this.editor.foldCode(CodeMirror.Pos(lineNumber, 0))
-        })
-    }
-
-    onChange(newContent) {
-        this.tabs.getActiveTab().setContent(newContent)
-    }
-
-    onFoldChange(lineFoldedUnfolded) {
-        this.tabs.getActiveTab().onFoldChange(lineFoldedUnfolded)
+            this.tabs.setActiveTab(tab)
+            cmEditor.setValue(tab.getContent())
+            this.editor.setFoldedLines(tab.getFoldedLines())
+            this.editor.setScrollPos(tab.getScrollPosition())
+        } catch (e) {
+            console.error(e)
+        } finally {
+            this.isSwitchingTab = false
+        }
     }
 
     isActiveTabInView() {
@@ -167,7 +205,7 @@ class TabsView {
             return
         }
         const node = this.getActiveTabNode()
-        if (node) {
+        if (node && node.parentNode) {
             return this.isInView(node, node.parentNode)
         }
 
@@ -175,9 +213,9 @@ class TabsView {
     }
 
     getActiveTabNode() {
-        for (const [key, node] of this.tabNodes) {
-            if (node.classList.contains('active')) {
-                return node
+        for (const [key, textNode] of this.tabNodes) {
+            if (textNode.node.classList.contains('active')) {
+                return textNode
             }
         }
         return null
@@ -185,9 +223,9 @@ class TabsView {
 
     moveActiveTabToView() {
         this.scroller.stop()
-        const node = this.getActiveTabNode()
-        if (node) {
-            node.parentNode.scrollLeft = node.offsetLeft
+        const textNode = this.getActiveTabNode()
+        if (textNode) {
+            textNode.node.parentNode.scrollLeft = node.offsetLeft
         }
     }
 

@@ -1,16 +1,10 @@
 class Tabs {
+    eventBus
     tabs
     activeTabIndex
 
-    constructor(tabs, content) {
-        if (tabs) {
-            this.tabs = tabs
-        } else {
-            const initialTab = new Tab(1)
-            this.tabs = []
-            this.addTab(initialTab)
-            this.setActiveTab(initialTab)
-        }
+    constructor() {
+        this.tabs = []
     }
 
     addTab(tab) {
@@ -18,13 +12,15 @@ class Tabs {
         return this
     }
 
-    removeTab(tab) {
+    removeTab(tab, withConfirmation) {
         if (this.tabs.length < 2) {
             return false
         }
 
-        if (!confirm("Are you sure?")) {
-            return false
+        if (withConfirmation) {
+            if (!confirm("Are you sure?")) {
+                return false
+            }
         }
 
         const index = this.tabs.indexOf(tab)
@@ -54,5 +50,33 @@ class Tabs {
 
     getActiveTab() {
         return this.tabs[this.activeTabIndex]
+    }
+
+    getState() {
+        const state = {
+            activeTabUuid: this.getActiveTab().uuid,
+            tabs: []
+        }
+        for (const i in this.tabs) {
+            state.tabs.push(this.tabs[i].getState())
+        }
+        return state
+    }
+
+    createTabFromState(tabState) {
+        const tab = new Tab(tabState.title, tabState.content, tabState.uuid)
+        tab.setFromState(tabState)
+
+        return tab
+    }
+
+    getTabByUuid(uuid) {
+        for (const i in this.tabs) {
+            const tab = this.tabs[i]
+            if (tab.uuid == uuid) {
+                return tab
+            }
+        }
+        return null
     }
 }
