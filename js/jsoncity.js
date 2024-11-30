@@ -224,11 +224,17 @@ class JsonCityEditor {
             }
 
             jsl.parser.parse(jsonVal)
+
+            const emptyFoldedLines = []
+            this.tabs.getActiveTab().foldedLines = emptyFoldedLines
+            this.setFoldedLines(emptyFoldedLines)
+
             if (compress) {
                 this.editor.setValue(JSON.stringify(JSON.parse(jsonVal), null, ""))
             } else {
                 this.editor.setValue(JSON.stringify(JSON.parse(jsonVal), null, "\t"));
             }
+            this.syncState()
         } catch (parseException) {
             console.error(parseException)
             alert("Invalid JSON!");
@@ -244,8 +250,7 @@ class JsonCityEditor {
         this.syncState()
     }
 
-    onFoldChange(line, a, b, c) {
-        console.log(line, a, b, c)
+    onFoldChange(line) {
         this.tabs.getActiveTab().onFoldChange(line)
         this.syncState()
     }
