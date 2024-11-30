@@ -21,6 +21,14 @@ const sassFiles = [
 ];
 const outputCSSFile = 'css/style.css'; // Output path for CSS
 
+// Suppress deprecation warnings
+const originalStderrWrite = process.stderr.write;
+process.stderr.write = (msg) => {
+  if (!msg.includes('Deprecation Warning')) {
+    originalStderrWrite.call(process.stderr, msg);
+  }
+};
+
 // Concatenate all JS files
 let concatenatedContent = '';
 
