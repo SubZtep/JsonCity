@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "cssnano": "^7.0.6",
+    "nodemon": "^3.1.7",
+    "postcss": "^8.4.49",
+    "sass": "^1.81.0"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production node build.js",
+    "watch": "nodemon --exec node build.js --ignore js/jsoncity.js --ignore css/style.css --ext js,scss"
+  }
+}
