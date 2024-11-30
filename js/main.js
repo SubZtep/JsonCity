@@ -18,6 +18,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	jsonCityEditor.init()
 	jsonCityHeader.init()
-
-	window.e = jsonCityEditor
 })
