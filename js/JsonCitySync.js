@@ -1,6 +1,6 @@
 class JsonCitySync {
 	instanceId
-    channel
+	channel
 	localStorageEnabled
 	windowSyncEnabled
 

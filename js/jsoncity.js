@@ -1,6 +1,6 @@
 class JsonCitySync {
 	instanceId
-    channel
+	channel
 	localStorageEnabled
 	windowSyncEnabled
 
@@ -276,9 +276,7 @@ class JsonCityEditor {
                         if (tabState.content != activeTabState.content) {
                             this.editor.setValue(tabState.content)
                         }
-                        if (JSON.stringify(tabState.foldedLines) != JSON.stringify(activeTabState.foldedLines)) {
-                            this.setFoldedLines(tabState.foldedLines)
-                        }
+                        this.setFoldedLines(tabState.foldedLines)
                     }
                     tab.setFromState(tabState)
                 } else {
@@ -769,9 +767,9 @@ class TabsView {
     }
 
     getActiveTabNode() {
-        for (const [key, textNode] of this.tabNodes) {
-            if (textNode.node.classList.contains('active')) {
-                return textNode
+        for (const [key, tabNodes] of this.tabNodes) {
+            if (tabNodes.node.classList.contains('active')) {
+                return tabNodes.node
             }
         }
         return null
@@ -779,9 +777,9 @@ class TabsView {
 
     moveActiveTabToView() {
         this.scroller.stop()
-        const textNode = this.getActiveTabNode()
-        if (textNode) {
-            textNode.node.parentNode.scrollLeft = node.offsetLeft
+        const node = this.getActiveTabNode()
+        if (node) {
+            node.parentNode.scrollLeft = node.offsetLeft
         }
     }
 
@@ -801,16 +799,16 @@ class Scroller {
     animationId
 
     // linear
-    #deltaX = {
+    deltaX = {
         target: 0,
         applied: 0
     }
-    #deltaY = {
+    deltaY = {
         target: 0,
         applied: 0
     }
-    #duration = 0
-    #timeStart = 0
+    duration = 0
+    timeStart = 0
 
     constructor(element) {
         this.element = element;
@@ -828,57 +826,57 @@ class Scroller {
             return
         }
 
-        this.#deltaX.target = deltaX
-        this.#deltaX.applied = 0
+        this.deltaX.target = deltaX
+        this.deltaX.applied = 0
 
-        this.#deltaY.target = deltaY
-        this.#deltaY.applied = 0
+        this.deltaY.target = deltaY
+        this.deltaY.applied = 0
 
-        this.#duration = duration
+        this.duration = duration
 
-        var now = Date.now()
-        this.#timeStart = now
+        const now = Date.now()
+        this.timeStart = now
 
-        var that = this
+        const that = this
         this.animationId = window.requestAnimationFrame(function() {
             that.step()
         })
     }
 
     step() {
-        var now = Date.now()
-        var dt = now - this.#timeStart
+        const now = Date.now()
+        const dt = now - this.timeStart
 
-        if (dt < this.#duration) {
-            var pct = dt / this.#duration
-            if (this.#deltaX.target) {
-                var offsetX = this.#deltaX.target * pct
-                var diffX = offsetX - this.#deltaX.applied
-                this.#deltaX.applied = offsetX
+        if (dt < this.duration) {
+            const pct = dt / this.duration
+            if (this.deltaX.target) {
+                const offsetX = this.deltaX.target * pct
+                const diffX = offsetX - this.deltaX.applied
+                this.deltaX.applied = offsetX
 
                 this.element.scrollLeft += diffX
             }
 
-            if (this.#deltaY.target) {
-                var offsetY = this.#deltaY.target * pct
-                var diffY = offsetY - this.#deltaY.applied
-                this.#deltaY.applied = offsetY
+            if (this.deltaY.target) {
+                const offsetY = this.deltaY.target * pct
+                const diffY = offsetY - this.deltaY.applied
+                this.deltaY.applied = offsetY
 
                 this.element.scrollTop += diffY
             }
 
-            var that = this
+            const that = this
             this.animationId = window.requestAnimationFrame(function() {
                 that.step()
             })
 
         } else {
             // last step
-            if (this.#deltaX.target) {
-                this.element.scrollLeft += this.#deltaX.target - this.#deltaX.applied
+            if (this.deltaX.target) {
+                this.element.scrollLeft += this.deltaX.target - this.deltaX.applied
             }
-            if (this.#deltaY.target) {
-                this.element.scrollTop += this.#deltaY.target - this.#deltaY.applied
+            if (this.deltaY.target) {
+                this.element.scrollTop += this.deltaY.target - this.deltaY.applied
             }
         }
     }

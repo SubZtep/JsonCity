@@ -213,9 +213,9 @@ class TabsView {
     }
 
     getActiveTabNode() {
-        for (const [key, textNode] of this.tabNodes) {
-            if (textNode.node.classList.contains('active')) {
-                return textNode
+        for (const [key, tabNodes] of this.tabNodes) {
+            if (tabNodes.node.classList.contains('active')) {
+                return tabNodes.node
             }
         }
         return null
@@ -223,9 +223,9 @@ class TabsView {
 
     moveActiveTabToView() {
         this.scroller.stop()
-        const textNode = this.getActiveTabNode()
-        if (textNode) {
-            textNode.node.parentNode.scrollLeft = node.offsetLeft
+        const node = this.getActiveTabNode()
+        if (node) {
+            node.parentNode.scrollLeft = node.offsetLeft
         }
     }
 

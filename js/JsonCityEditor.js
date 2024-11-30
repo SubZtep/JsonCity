@@ -203,9 +203,7 @@ class JsonCityEditor {
                         if (tabState.content != activeTabState.content) {
                             this.editor.setValue(tabState.content)
                         }
-                        if (JSON.stringify(tabState.foldedLines) != JSON.stringify(activeTabState.foldedLines)) {
-                            this.setFoldedLines(tabState.foldedLines)
-                        }
+                        this.setFoldedLines(tabState.foldedLines)
                     }
                     tab.setFromState(tabState)
                 } else {
